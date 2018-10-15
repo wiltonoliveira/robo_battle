@@ -6,39 +6,34 @@
 
 void arena ();
 void imprimir_robo ();
+int move_up (struct Robo robo);
+//void move_down (struct Robo robo);
+//void move_left (struct Robo robo);
+//void move_right (struct Robo robo);
 
-
-struct robo {
+struct Robo {
 	float life;
 	int ammo;
 	int fuel;
 	int range;
 	
-
+	int lin, col;
 };
+
+
 
 struct Estrategia {
-
+	int a;
 };
 
-struct Grupo {
-	struct robo robo1;
-	struct Estrategia estrategia1;
-	
-	struct robo robo2;
-	struct Estrategia estrategia2;
-	
-	struct robo robo3;
-	struct Estrategia estrategia3;
-};
 
-void robo_config (struct robo robo1, struct robo robo2, struct robo robo3);
+
+
 
 int main()
 {
-	struct Grupo grupo;
 	
-	robo_config (grupo.robo1, grupo.robo2, grupo.robo3);
+	
 	
 	//arena ();
 	//imprimir_robo ();
@@ -72,6 +67,23 @@ void imprimir_robo (){
 }
 
 
-void robo_config (struct robo robo1, struct robo robo2, struct robo robo3);{
+
+int move_up (struct Robo robo) {
+	robo.col = robo.col - 1;
 	
+	return robo.col;
 }
+
+/*
+void move_down (struct Robo robo){
+	robo.col = robo.col + 1;
+}
+
+void move_left (struct Robo robo){
+	robo.lin = robo.lin + 1
+}
+
+void move_right (struct Robo robo){
+	robo.lin = robo.lin - 1;
+}
+*/
