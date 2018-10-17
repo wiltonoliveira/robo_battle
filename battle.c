@@ -22,6 +22,10 @@ void move_up (robos* robo);
 void move_down (robos* robo);
 void move_left (robos* robo);
 void move_right (robos* robo);
+void diag_sup_esq (robos* robo);
+void diag_sup_dir (robos* robo);
+void diag_inf_esq (robos* robo);
+void diag_inf_dir (robos* robo);
 
 int main()
 {	
@@ -55,7 +59,25 @@ void move_left (robos* robo){
 }
 
 void move_right (robos* robo){
-	robo->lin = robo->lin + 1;
+	robo->col = robo->col + 1;
+}
+void diag_sup_esq (robos* robo){
+	move_up (robo);
+	move_left (robo);
+}
+
+void diag_sup_dir (robos* robo){
+	move_up (robo);
+	move_right (robo);
+}
+
+void diag_inf_esq (robos* robo){
+	move_down (robo);
+	move_left (robo);
+}
+void diag_inf_dir (robos* robo){
+	move_down (robo);
+	move_right (robo);
 }
 
 void arena (robos* robo){
@@ -71,20 +93,20 @@ void arena (robos* robo){
 			
 			else if (i == robo->lin && j == robo->col)
 						imprimir_robo ();
-			/*
-				else if (i == 10 && j == 5)
-					imprimir_robo ();
-			*/	
+		
+			
 			else
 				printf (" ");
 				
 			
 		printf ("\n");
 	}
+	system ("PAUSE");
+	diag_inf_dir (robo);
+	arena (robo);
 	
 }
 
-void imprimir_robo (){
-	
+void imprimir_robo (){	
 	printf ("%c", 219);
 }
