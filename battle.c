@@ -20,12 +20,14 @@ struct Disparo {
 };
 typedef struct Disparo disparo;
 
-void inicia_robo (robos* robo);
-void arena (robos* robo, disparo* dis);
+void inicia_robo (robos* corner, robos* horse, robos* hunter);
+void arena (robos* corner, robos* horse, robos* hunter);
 void imprimir_robo ();
 void imprimir_disparo ();
 
-void estrategia_corner (robos* corner);
+int valida_posicao (robos robo);
+
+void move_corner (robos* corner, int move_num);
 void move_horse (robos* horse, int move_num);
 void estrategia_hunter (robos* hunter);
 
@@ -55,19 +57,35 @@ int main()
 	disparo dis1;
 	
 		
-	inicia_robo (&corner);
-	arena (&corner, &dis1);
+	inicia_robo (&corner, &horse, &hunter);
+	arena (&corner, &horse, &hunter);
 	
 }
 
-void inicia_robo (robos* robo){
-	robo->ammo = 100;
-	robo->fuel = 100;
-	robo->range = 2;
-	robo->life = 100;
+void inicia_robo (robos* corner, robos* horse, robos* hunter){
+	hunter->ammo = 100;
+	hunter->fuel = 100;
+	hunter->life = 100;
+	hunter->range = 2;
 	
-	robo->lin = 4;
-	robo->col = 2;
+	hunter->lin = 4;
+	hunter->col = 2;
+
+	corner->ammo = 150;
+	corner->fuel = 100;
+	corner->life = 100;
+	corner->range = 4;
+
+	corner->lin = 1;
+	corner->col = 1;
+
+	horse->ammo = 100;
+	horse->fuel = 100;
+	horse->life = 100;
+	horse->range = 3;
+
+	horse->lin = 6;
+	horse->col = 9;
 }
 
 void move_horse (robos* horse, int move_num){
@@ -137,7 +155,57 @@ void move_horse (robos* horse, int move_num){
 		
 }
 
-void arena (robos* robo, disparo* dis){
+void move_corner (robos* corner, int move_num){
+		
+	switch (move_num){
+		case 1: {
+			move_up (corner);
+		}
+		case 2: {
+			move_down(corner);
+		}
+		case 3: {
+			move_left (corner);
+		}
+		case 4: {
+			move_right (corner);
+		}
+}
+
+	/*
+	if (corner->lin < (TAM_LIN / 2) && corner->col < (TAM_COL / 2)){
+		move_up (&aux);
+		move_left (&aux);
+	}
+	else if (corner->lin < (TAM_LIN / 2) && corner->col > (TAM_COL / 2)){
+			move_up (&aux);
+			move_right (&aux);
+	}
+	else if (corner->lin > (TAM_LIN / 2) && corner-> col < (TAM_COL / 2)){
+		move_down (&aux);
+		move_left (&aux);
+	}
+	else if (corner->lin > (TAM_LIN / 2) && corner-> col > (TAM_COL / 2)){
+		move_down (&aux);
+		move_right (&aux);
+	}
+	
+	teste = valida_posicao (aux);
+	
+	if (teste == 0)
+	*/
+}
+
+int valida_posicao (robos robo){
+	
+	if (robo.lin <= 0 || robo.lin >= TAM_LIN || robo.col <= 0 || robo.col >= TAM_COL)
+		return 0;
+	
+	else
+		return 1;
+}
+
+void arena (robos* corner, robos* horse, robos* hunter){
 	int i, j;
 	
 	
@@ -150,11 +218,10 @@ void arena (robos* robo, disparo* dis){
 			else if (j == 0 || j == TAM_COL)
 				printf ("|");
 			
-			else if (i == robo->lin && j == robo->col)
+			else if (i == corner->lin && j == corner->col || i == horse->lin && j == horse->col || i == hunter->lin && j == hunter->col)
 						imprimir_robo ();
 			
-			else if (i == dis->lin && j == dis->col)
-						imprimir_disparo ();
+			
 			
 			else
 				printf (" ");
@@ -162,10 +229,22 @@ void arena (robos* robo, disparo* dis){
 			
 		printf ("\n");
 	}
-	while (robo->col < (TAM_COL - 1) && robo->col > 1 && robo->lin > 1 && robo->lin < (TAM_LIN - 1)){
-	diag_inf_dir(robo);
-	arena (robo, dis);
+	if (corner->life > 0){
+		if (corner->lin == 1 && corner->col < (TAM_COL - 1))
+			move_corner (corner, 4);
+		
+		else if (corner->lin < (TAM_LIN - 1) && corner->col == (TAM_COL - 1))
+				move_corner (corner, 2);
+
+		else if (corner->lin == (TAM_LIN - 1) && corner->col > 1)
+				move_corner (corner, 3);
+	
+		else if (corner->lin > 1 && corner->col == 1)
+				move_corner (corner, 1);
+
 	}
+	getchar();
+	arena (corner, horse, hunter);
 }
 
 void move_up (robos* robo){
