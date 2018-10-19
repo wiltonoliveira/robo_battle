@@ -233,18 +233,22 @@ void arena (robos* corner, robos* horse, robos* hunter){
 		if (corner->lin == 1 && corner->col < (TAM_COL - 1))
 			move_corner (corner, 4);
 		
-		else if (corner->lin < (TAM_LIN - 1) && corner->col == (TAM_COL - 1))
+		else if (corner->lin < (TAM_LIN - 1) && corner->col == (TAM_COL - 1)){
 				move_corner (corner, 2);
-
+				printf ("%d - %d", corner->lin, corner->col);
+		}
 		else if (corner->lin == (TAM_LIN - 1) && corner->col > 1)
-				move_corner (corner, 3);
+				corner->col = corner->col - 1;
 	
 		else if (corner->lin > 1 && corner->col == 1)
-				move_corner (corner, 1);
+				corner->lin = corner->lin - 1;
 
 	}
+	printf ("%d - %d\n", corner->lin, corner->col);
 	getchar();
+	system ("cls");
 	arena (corner, horse, hunter);
+	
 }
 
 void move_up (robos* robo){
