@@ -22,7 +22,7 @@ struct Disparo {
 typedef struct Disparo disparo;
 
 void inicia_robo (robos* robo);
-void arena (robos* robo);
+void arena (robos* robo, disparo* dis);
 void imprimir_robo ();
 void imprimir_disparo ();
 
@@ -48,10 +48,12 @@ void dis_inf_d (disparo* dis);
 
 int main()
 {	
-	struct Robo robo1;
+	robos robo1;
+	disparo dis1;
 	
+		
 	inicia_robo (&robo1);
-	arena (&robo1);
+	arena (&robo1, &dis1);
 	//imprimir_robo ();
 }
 
@@ -65,9 +67,11 @@ void inicia_robo (robos* robo){
 	robo->col = 2;
 }
 
-void arena (robos* robo){
+void arena (robos* robo, disparo* dis){
 	int i, j;
-
+	
+	
+	
 	for (i = 0; i <= TAM_LIN; i++){
 		for (j = 0; j <= TAM_COL; j++)
 			if (i == 0 || i == TAM_LIN)
@@ -78,7 +82,9 @@ void arena (robos* robo){
 			
 			else if (i == robo->lin && j == robo->col)
 						imprimir_robo ();
-		
+			
+			else if (i == dis->lin && j == dis->col)
+						imprimir_disparo ();
 			
 			else
 				printf (" ");
@@ -86,10 +92,10 @@ void arena (robos* robo){
 			
 		printf ("\n");
 	}
-	system ("PAUSE");
-	diag_inf_dir (robo);
-	arena (robo);
-	
+	while (robo->col < (TAM_COL - 1) && robo->col > 1 && robo->lin > 1 && robo->lin < (TAM_LIN - 1)){
+	diag_inf_dir(robo);
+	arena (robo, dis);
+	}
 }
 
 void move_up (robos* robo){
@@ -165,7 +171,7 @@ void dis_inf_d (disparo* dis){
 
 
 void imprimir_disparo (){
-	printf (".");
+	printf ("*");
 }
 
 
