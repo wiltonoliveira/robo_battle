@@ -4,7 +4,6 @@
 #define TAM_LIN 20
 #define TAM_COL 60
 
-
 struct Robo {
 	float life;
 	int ammo;
@@ -25,6 +24,10 @@ void inicia_robo (robos* robo);
 void arena (robos* robo, disparo* dis);
 void imprimir_robo ();
 void imprimir_disparo ();
+
+void estrategia_corner (robos* corner);
+void move_horse (robos* horse, int move_num);
+void estrategia_hunter (robos* hunter);
 
 void move_up (robos* robo);
 void move_down (robos* robo);
@@ -48,13 +51,13 @@ void dis_inf_d (disparo* dis);
 
 int main()
 {	
-	robos robo1;
+	robos corner, horse, hunter;
 	disparo dis1;
 	
 		
-	inicia_robo (&robo1);
-	arena (&robo1, &dis1);
-	//imprimir_robo ();
+	inicia_robo (&corner);
+	arena (&corner, &dis1);
+	
 }
 
 void inicia_robo (robos* robo){
@@ -65,6 +68,73 @@ void inicia_robo (robos* robo){
 	
 	robo->lin = 4;
 	robo->col = 2;
+}
+
+void move_horse (robos* horse, int move_num){
+	robos aux ;
+	
+	aux.lin = horse->lin;
+	aux.col = horse->col;
+	
+	switch (move_num){
+		case 1:{
+			move_up (&aux);
+			move_up (&aux);
+			move_left (&aux);
+			break;
+		}
+		case 2:{
+			move_up (&aux);
+			move_up (&aux);
+			move_right (&aux);
+			break;
+		}
+		
+		case 3:{
+			move_down (&aux);
+			move_down (&aux);
+			move_left (&aux);
+			break;
+		}
+		case 4: {
+			move_down (&aux);
+			move_down (&aux);
+			move_right (&aux);
+			break;
+		}
+		case 5: {
+			move_left (&aux);
+			move_left (&aux);
+			move_up (&aux);
+			break;
+		}
+		case 6:{
+			move_left (&aux);
+			move_left (&aux);
+			move_down (&aux);
+			break;
+		}
+		case 7: {
+			move_right (&aux);
+			move_right (&aux);
+			move_up (&aux);
+			break;
+		}
+		case 8:{
+			move_right (&aux);
+			move_right (&aux);
+			move_down (&aux);
+			break;
+		}
+	}
+	if (aux.lin <= 0 || aux.lin >= TAM_LIN || aux.col <= 0 || aux.col >= TAM_COL){
+		move_horse (horse, move_num + 1);
+	}
+	else{
+		horse->lin = aux.lin;
+		horse->col = aux.col;
+	}
+		
 }
 
 void arena (robos* robo, disparo* dis){
