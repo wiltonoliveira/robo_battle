@@ -27,8 +27,11 @@ void imprimir_disparo ();
 
 int valida_posicao (robos robo);
 
+void corner_turn (robos* corner);
+void horse_turn (robos* horse, int num_mov);
+
 void move_corner (robos* corner, int move_num);
-void move_horse (robos* horse, int move_num);
+int move_horse (robos* horse, int move_num);
 void estrategia_hunter (robos* hunter);
 
 void move_up (robos* robo);
@@ -88,7 +91,7 @@ void inicia_robo (robos* corner, robos* horse, robos* hunter){
 	horse->col = 9;
 }
 
-void move_horse (robos* horse, int move_num){
+int move_horse (robos* horse, int move_num){
 	robos aux ;
 	
 	aux.lin = horse->lin;
@@ -151,6 +154,7 @@ void move_horse (robos* horse, int move_num){
 	else{
 		horse->lin = aux.lin;
 		horse->col = aux.col;
+		return move_num;
 	}
 		
 }
@@ -206,7 +210,7 @@ int valida_posicao (robos robo){
 }
 
 void arena (robos* corner, robos* horse, robos* hunter){
-	int i, j;
+	int i, j, num_move = 1;
 	
 	
 	
@@ -229,26 +233,97 @@ void arena (robos* corner, robos* horse, robos* hunter){
 			
 		printf ("\n");
 	}
-	if (corner->life > 0){
+	
+	corner_turn (corner);
+	horse_turn (horse, num_move);
+	
+	num_move++;
+	if (num_move > 8)
+		num_move = 1;
+	
+	 
+	sleep (1);
+	system ("cls");
+	arena (corner, horse, hunter);
+	
+}
+
+void corner_turn (robos* corner){
+	if (corner->life > 0 && corner->fuel > 0){
 		if (corner->lin == 1 && corner->col < (TAM_COL - 1))
 			move_corner (corner, 4);
 		
 		else if (corner->lin < (TAM_LIN - 1) && corner->col == (TAM_COL - 1)){
 				move_corner (corner, 2);
-				printf ("%d - %d", corner->lin, corner->col);
 		}
 		else if (corner->lin == (TAM_LIN - 1) && corner->col > 1)
 				corner->col = corner->col - 1;
 	
 		else if (corner->lin > 1 && corner->col == 1)
 				corner->lin = corner->lin - 1;
-
 	}
-	printf ("%d - %d\n", corner->lin, corner->col);
-	getchar();
-	system ("cls");
-	arena (corner, horse, hunter);
+}
+
+void horse_turn (robos* horse, int num_mov){
 	
+	if (horse->life > 0 && horse->fuel > 0){
+		
+		if (horse->lin > 1 && horse->lin < (TAM_LIN - 1) && horse->col > 1 && horse->col < (TAM_COL - 1)){
+			switch (num_mov){
+				case 1:{
+					move_up (horse);
+					move_up (horse);
+					move_left (horse);
+					break;
+				}
+				case 2:{
+					move_down (horse);
+					move_down (horse);
+					move_left (horse);
+					break;
+					
+				}
+		
+				case 3:{
+					move_up (horse);
+					move_up (horse);
+					move_right (horse);
+					break;
+				}
+				case 4: {
+					move_down (horse);
+					move_down (horse);
+					move_right (horse);
+					break;
+				}
+				case 5: {
+					move_left (horse);
+					move_left (horse);
+					move_up (horse);
+					break;
+				}
+				case 6:{
+					move_left (horse);
+					move_left (horse);
+					move_down (horse);
+					break;
+				}
+				case 7: {
+					move_right (horse);
+					move_right (horse);
+					move_up (horse);
+					break;
+				}
+				case 8:{
+					move_right (horse);
+					move_right (horse);
+					move_down (horse);
+					break;
+				}
+			}
+		}
+	
+	}
 }
 
 void move_up (robos* robo){
